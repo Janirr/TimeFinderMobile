@@ -15,8 +15,8 @@ class BookingsActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TimeFinderTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
-                    BookingsScreen()
+                MainScaffold(title = "Rezerwacje") {
+                    HomeScreen()
                 }
             }
         }
@@ -32,6 +32,8 @@ fun BookingsScreen() {
 @Composable
 fun BookingsScreenPreview() {
     TimeFinderTheme {
-        HomeScreen()
+        MainScaffold(title = "Rezerwacje") {
+            HomeScreen()
+        }
     }
 }

@@ -15,8 +15,8 @@ class ProfileActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TimeFinderTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
-                    ProfileScreen()
+                MainScaffold(title = "Profil") {
+                    HomeScreen()
                 }
             }
         }
@@ -32,6 +32,8 @@ fun ProfileScreen() {
 @Composable
 fun ProfileScreenPreview() {
     TimeFinderTheme {
-        ProfileScreen()
+        MainScaffold(title = "Profil") {
+            HomeScreen()
+        }
     }
 }

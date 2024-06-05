@@ -1,3 +1,4 @@
+// HomeActivity.kt
 package com.example.timefinder
 
 import android.os.Bundle
@@ -12,7 +13,7 @@ class HomeActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TimeFinderTheme {
-                MainScaffold {
+                MainScaffold(title = "Główna") {
                     HomeScreen()
                 }
             }
@@ -29,10 +30,8 @@ fun HomeScreen() {
 @Composable
 fun HomeScreenPreview() {
     TimeFinderTheme {
-        MainScaffold {
+        MainScaffold(title = "Główna") {
             HomeScreen()
         }
     }
 }
-
-// Repeat similar steps for ReservationActivity, BookingsActivity, ProfileActivity

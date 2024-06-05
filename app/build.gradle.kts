@@ -70,8 +70,8 @@ dependencies {
     // Add the necessary dependencies for LazyColumn and other compose foundation components
     implementation("androidx.compose.foundation:foundation:1.4.2")
     // Retrofit and Gson dependencies
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
-    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
