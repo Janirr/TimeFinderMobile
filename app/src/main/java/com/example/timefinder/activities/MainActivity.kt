@@ -1,10 +1,13 @@
-package com.example.timefinder
+package com.example.timefinder.activities
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -13,20 +16,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.timefinder.*
 import com.example.timefinder.ui.theme.TimeFinderTheme
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -44,35 +46,25 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DataScreen() {
     val coroutineScope = rememberCoroutineScope()
+    val apiManager = remember { ApiManager() }
     var data by remember { mutableStateOf(listOf<Tutor>()) }
+    var availableTimes by remember { mutableStateOf<Map<LocalDate, List<AvailableTime>>>(emptyMap()) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var tutorExpanded by remember { mutableStateOf(false) }
     var timeExpanded by remember { mutableStateOf(false) }
-    var selectedTutor by remember { mutableStateOf("Jakub Januszewski") }
+    var selectedTutor by remember { mutableStateOf<Tutor?>(null) }
     var selectedTime by remember { mutableStateOf("60 minut") }
 
     LaunchedEffect(Unit) {
-        coroutineScope.launch(Dispatchers.IO) {
-            RetrofitInstance.api.getData().enqueue(object : Callback<List<Tutor>> {
-                override fun onResponse(
-                    call: Call<List<Tutor>>,
-                    response: Response<List<Tutor>>
-                ) {
-                    if (response.isSuccessful) {
-                        data = response.body() ?: emptyList()
-                    } else {
-                        errorMessage = "Error: ${response.message()}"
-                    }
-                }
-
-                override fun onFailure(call: Call<List<Tutor>>, t: Throwable) {
-                    errorMessage = t.message
-                }
-            })
+        coroutineScope.launch {
+            apiManager.getTutors(
+                onSuccess = { tutors -> data = tutors },
+                onFailure = { error -> errorMessage = error }
+            )
         }
     }
 
@@ -110,7 +102,7 @@ fun DataScreen() {
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(text = selectedTutor)
+                            Text(text = selectedTutor?.let { "${it.name} ${it.surname}" } ?: "Wybierz korepetytora")
                             Icon(imageVector = Icons.Default.ArrowDropDown, contentDescription = "Dropdown")
                         }
                     }
@@ -124,7 +116,7 @@ fun DataScreen() {
                             DropdownMenuItem(
                                 modifier = Modifier.fillMaxWidth(),
                                 onClick = {
-                                    selectedTutor = "${tutor.name} ${tutor.surname}"
+                                    selectedTutor = tutor
                                     tutorExpanded = false
                                 },
                                 text = {
@@ -198,36 +190,77 @@ fun DataScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                text = "Dostępne terminy",
-                color = Color.Black,
-                fontSize = 18.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
-            ) {
-                items(data) {
-                    Card(
-                        shape = MaterialTheme.shapes.medium,
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFFE1BEE7)),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 4.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .padding(16.dp)
-                        ) {
-                            Text(
-                                text = "Monday, 05 July 2024, 16:30",
-                                style = MaterialTheme.typography.titleMedium,
-                                color = Color(0xFF9C27B0),
+            Button(
+                onClick = {
+                    selectedTutor?.let { tutor ->
+                        coroutineScope.launch {
+                            apiManager.getFreeTime(
+                                tutorId = tutor.id,
+                                calendarId = tutor.calendarId,
+                                minutesForLesson = selectedTime.split(" ")[0].toInt(),
+                                onSuccess = { times -> availableTimes = times },
+                                onFailure = { error -> errorMessage = error }
                             )
+                        }
+                    }
+                },
+                modifier = Modifier.fillMaxWidth().padding(8.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+            ) {
+                Text(text = "Pokaż dostępne terminy")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (availableTimes.isNotEmpty()) {
+                Text(
+                    text = "Dostępne terminy",
+                    color = Color.Black,
+                    fontSize = 18.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+                    availableTimes.forEach { (date, times) ->
+                        item {
+                            Text(
+                                text = date.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("pl", "PL"))),
+                                style = MaterialTheme.typography.titleMedium,
+                                color = Color.Black
+                            )
+
+                            LazyRow(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 8.dp)
+                            ) {
+                                items(times) { time ->
+                                    Card(
+                                        shape = MaterialTheme.shapes.medium,
+                                        colors = CardDefaults.cardColors(containerColor = Color(0xFFE1BEE7)),
+                                        modifier = Modifier
+                                            .padding(horizontal = 4.dp)
+                                            .width(80.dp)
+                                    ) {
+                                        Column(
+                                            modifier = Modifier
+                                                .padding(16.dp)
+                                        ) {
+                                            Text(
+                                                text = "${time.fromHour}",
+                                                style = MaterialTheme.typography.titleMedium,
+                                                color = Color(0xFF9C27B0),
+                                                textAlign = TextAlign.Center
+                                            )
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -236,6 +269,7 @@ fun DataScreen() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun DataScreenPreview() {

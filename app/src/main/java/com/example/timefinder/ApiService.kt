@@ -3,12 +3,28 @@ package com.example.timefinder
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Path
+import java.time.LocalDate
+import java.time.LocalTime
 import java.util.Date
 
 interface ApiService {
     @GET("tutors")
-    fun getData(): Call<List<Tutor>>
+    fun getTutors(): Call<List<Tutor>>
+
+    @GET("/reservations/tutor/{tutorId}/calendar/{calendarId}/{minutesForLesson}")
+    fun getFreeTime(
+        @Path("tutorId") tutorId: Int,
+        @Path("calendarId") calendarId: String,
+        @Path("minutesForLesson") minutesForLesson: Int
+    ): Call<HashMap<LocalDate, List<AvailableTime>>>
 }
+
+data class AvailableTime(
+    @SerializedName("fromHour") val fromHour: LocalTime,
+    @SerializedName("untilHour") val untilHour: LocalTime
+)
+
 data class Reservation(
     @SerializedName("id") val id: String,
     @SerializedName("start") val start: Date,

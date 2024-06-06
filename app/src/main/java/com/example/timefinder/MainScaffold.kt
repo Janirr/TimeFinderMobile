@@ -19,6 +19,10 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.example.timefinder.activities.BookingsActivity
+import com.example.timefinder.activities.HomeActivity
+import com.example.timefinder.activities.MainActivity
+import com.example.timefinder.activities.ProfileActivity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -67,7 +71,7 @@ fun BottomNavigationBar() {
         containerColor = MaterialTheme.colorScheme.primary
     ) {
         NavigationBarItem(
-            icon = { Icon(imageVector = Icons.Default.Home, contentDescription = "Home") },
+            icon = { Icon(imageVector = Icons.Default.Home, contentDescription = "Home", modifier = Modifier.size(35.dp)) },
             label = { Text("Główna") },
             selected = false,
             onClick = {
@@ -82,7 +86,7 @@ fun BottomNavigationBar() {
         )
 
         NavigationBarItem(
-            icon = { Icon(imageVector = Icons.Default.DateRange, contentDescription = "Zarezerwuj") },
+            icon = { Icon(imageVector = Icons.Default.DateRange, contentDescription = "Zarezerwuj", modifier = Modifier.size(35.dp)) },
             label = { Text("Zarezerwuj") },
             selected = false,
             onClick = {
@@ -96,7 +100,7 @@ fun BottomNavigationBar() {
             )
         )
         NavigationBarItem(
-            icon = { Icon(imageVector = Icons.Default.List, contentDescription = "Rezerwacje") },
+            icon = { Icon(imageVector = Icons.Default.List, contentDescription = "Rezerwacje", modifier = Modifier.size(35.dp)) },
             label = { Text("Rezerwacje") },
             selected = false,
             onClick = {
@@ -110,7 +114,7 @@ fun BottomNavigationBar() {
             )
         )
         NavigationBarItem(
-            icon = { Icon(imageVector = Icons.Default.Person, contentDescription = "Profil") },
+            icon = { Icon(imageVector = Icons.Default.Person, contentDescription = "Profil", modifier = Modifier.size(35.dp)) },
             label = { Text("Profil") },
             selected = false,
             onClick = {
