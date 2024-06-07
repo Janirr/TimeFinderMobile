@@ -16,8 +16,6 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.timefinder.activities.BookingsActivity
 import com.example.timefinder.activities.HomeActivity
@@ -27,7 +25,7 @@ import com.example.timefinder.activities.ProfileActivity
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScaffold(title: String, content: @Composable () -> Unit) {
-    val context = LocalContext.current
+//    val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
