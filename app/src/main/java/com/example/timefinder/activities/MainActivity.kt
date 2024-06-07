@@ -17,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,8 +25,10 @@ import androidx.compose.ui.unit.sp
 import com.example.timefinder.*
 import com.example.timefinder.ui.theme.TimeFinderTheme
 import kotlinx.coroutines.launch
+import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import java.time.YearMonth
+import java.time.format.TextStyle
 import java.util.Locale
 
 class MainActivity : ComponentActivity() {
@@ -60,6 +63,7 @@ fun DataScreen() {
     var selectedTutor by remember { mutableStateOf<Tutor?>(null) }
     var selectedTime by remember { mutableStateOf("60 minut") }
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
+    var showCalendar by remember { mutableStateOf(false) } // State to control the visibility of the calendar
 
     LaunchedEffect(Unit) {
         coroutineScope.launch {
@@ -197,7 +201,10 @@ fun DataScreen() {
                                     tutorId = tutor.id,
                                     calendarId = tutor.calendarId,
                                     minutesForLesson = selectedTime.split(" ")[0].toInt(),
-                                    onSuccess = { times -> availableTimes = times },
+                                    onSuccess = { times ->
+                                        availableTimes = times
+                                        showCalendar = true // Show calendar when the available times are loaded
+                                    },
                                     onFailure = { error -> errorMessage = error }
                                 )
                             }
@@ -213,56 +220,55 @@ fun DataScreen() {
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                if (availableTimes.isNotEmpty()) {
-                    Text(
-                        text = "Dostępne terminy",
-                        color = Color.Black,
-                        fontSize = 18.sp,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
+//                if (availableTimes.isNotEmpty()) {
+//                    Text(
+//                        text = "Dostępne terminy",
+//                        color = Color.Black,
+//                        fontSize = 18.sp,
+//                        textAlign = TextAlign.Center,
+//                        modifier = Modifier.fillMaxWidth()
+//                    )
+//                }
             }
         }
 
-        items(availableTimes.keys.toList()) { date ->
-            Text(
-                text = date.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("pl", "PL"))),
-                style = MaterialTheme.typography.bodyLarge,
-                color = if (selectedDate == date) MaterialTheme.colorScheme.primary else Color.Black,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .clickable {
+        // Conditionally display the calendar based on showCalendar state
+        if (showCalendar) {
+            item {
+                CalendarView(
+                    availableDates = availableTimes.keys.toList(),
+                    selectedDate = selectedDate,
+                    onDateSelected = { date ->
                         selectedDate = date
                     }
-            )
+                )
+            }
+        }
 
-            if (selectedDate == date) {
-                availableTimes[date]?.let { times ->
-                    LazyRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp)
-                    ) {
-                        items(times) { time ->
-                            Card(
-                                shape = MaterialTheme.shapes.medium,
-                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary),
-                                modifier = Modifier
-                                    .padding(horizontal = 4.dp)
-                                    .width(80.dp)
+        if (selectedDate != null && availableTimes[selectedDate] != null) {
+            item {
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp)
+                ) {
+                    items(availableTimes[selectedDate]!!) { time ->
+                        Card(
+                            shape = MaterialTheme.shapes.medium,
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary),
+                            modifier = Modifier
+                                .padding(horizontal = 4.dp)
+                                .width(80.dp)
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(16.dp)
                             ) {
-                                Column(
-                                    modifier = Modifier.padding(16.dp)
-                                ) {
-                                    Text(
-                                        text = "${time.fromHour}",
-                                        style = MaterialTheme.typography.titleMedium,
-                                        color = Color.White,
-                                        textAlign = TextAlign.Center
-                                    )
-                                }
+                                Text(
+                                    text = "${time.fromHour}",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
                             }
                         }
                     }
@@ -271,6 +277,70 @@ fun DataScreen() {
         }
     }
 }
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun CalendarView(
+    availableDates: List<LocalDate>,
+    selectedDate: LocalDate?,
+    onDateSelected: (LocalDate) -> Unit
+) {
+    val currentMonth = YearMonth.now()
+    val firstDayOfMonth = currentMonth.atDay(1)
+    val lastDayOfMonth = currentMonth.atEndOfMonth()
+    val daysInMonth = firstDayOfMonth.dayOfWeek.value % 7
+    val dateMap = availableDates.associateWith { true }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            DayOfWeek.entries.forEach { dayOfWeek ->
+                Text(
+                    text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+
+        for (week in 0 until (daysInMonth + lastDayOfMonth.dayOfMonth) / 7 + 1) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                for (day in 0..6) {
+                    val dayOfMonth = week * 7 + day - daysInMonth + 1
+                    if (dayOfMonth > 0 && dayOfMonth <= lastDayOfMonth.dayOfMonth) {
+                        val date = currentMonth.atDay(dayOfMonth)
+                        val isAvailable = date in dateMap
+                        Text(
+                            text = dayOfMonth.toString(),
+                            textAlign = TextAlign.Center,
+                            color = when {
+                                date == selectedDate -> MaterialTheme.colorScheme.primary
+                                isAvailable -> Color.Black
+                                else -> Color.Gray
+                            },
+                            fontWeight = if (date == selectedDate) FontWeight.Bold else FontWeight.Normal,
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(8.dp)
+                                .clickable(enabled = isAvailable) { onDateSelected(date) }
+                        )
+                    } else {
+                        Text(
+                            text = "",
+                            modifier = Modifier.weight(1f).padding(8.dp)
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
