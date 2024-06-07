@@ -32,23 +32,23 @@ fun MainScaffold(title: String, content: @Composable () -> Unit) {
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = {
-            CenterAlignedTopAppBar(
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    MaterialTheme.colorScheme.primary,
-                    titleContentColor = Color.White,
-                ),
-                title = {
-                    Text(
-                        title,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        fontWeight = FontWeight.Bold
-                    )
-                },
-                scrollBehavior = scrollBehavior,
-            )
-        },
+//        topBar = {
+//            CenterAlignedTopAppBar(
+//                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+//                    MaterialTheme.colorScheme.primary,
+//                    titleContentColor = Color.White,
+//                ),
+//                title = {
+//                    Text(
+//                        title,
+//                        maxLines = 1,
+//                        overflow = TextOverflow.Ellipsis,
+//                        fontWeight = FontWeight.Bold
+//                    )
+//                },
+//                scrollBehavior = scrollBehavior,
+//            )
+//        },
         bottomBar = {
             BottomNavigationBar()
         }
