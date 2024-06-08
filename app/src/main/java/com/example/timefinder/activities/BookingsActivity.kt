@@ -14,7 +14,7 @@ class BookingsActivity : ComponentActivity() {
         setContent {
             TimeFinderTheme {
                 MainScaffold(title = "Rezerwacje") {
-                    HomeScreen()
+                    BookingsScreen()
                 }
             }
         }
@@ -31,7 +31,7 @@ fun BookingsScreen() {
 fun BookingsScreenPreview() {
     TimeFinderTheme {
         MainScaffold(title = "Rezerwacje") {
-            HomeScreen()
+            BookingsScreen()
         }
     }
 }

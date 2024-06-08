@@ -2,7 +2,10 @@ package com.example.timefinder
 
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call
+import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import java.time.LocalDate
 import java.time.LocalTime
@@ -18,7 +21,27 @@ interface ApiService {
         @Path("calendarId") calendarId: String,
         @Path("minutesForLesson") minutesForLesson: Int
     ): Call<HashMap<LocalDate, List<AvailableTime>>>
+
+    @POST("/login/student")
+    suspend fun loginStudent(@Body request: LoginRequest): Response<Student>
+
+    @POST("/login/tutor")
+    suspend fun loginTutor(@Body request: LoginRequest): Response<Tutor>
 }
+
+data class Student(
+    val id: Int,
+    val name: String,
+    val surname: String,
+    val email: String,
+    val phoneNumber: String,
+    val reservationList: List<Reservation>
+)
+
+data class LoginRequest(
+    val email: String,
+    val password: String
+)
 
 data class AvailableTime(
     @SerializedName("fromHour") val fromHour: LocalTime,
