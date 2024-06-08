@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import com.example.timefinder.activities.BookingsActivity
 import com.example.timefinder.activities.HomeActivity
 import com.example.timefinder.activities.LoginActivity
 import com.example.timefinder.activities.MainActivity
@@ -102,7 +103,7 @@ fun BottomNavigationBar() {
             label = { Text("Rezerwacje") },
             selected = false,
             onClick = {
-                context.startActivity(Intent(context, LoginActivity::class.java))
+                context.startActivity(Intent(context, BookingsActivity::class.java))
             },
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = Color.White,
