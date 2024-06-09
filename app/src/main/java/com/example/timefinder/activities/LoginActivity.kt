@@ -37,9 +37,9 @@ fun LoginScreen(viewModel: LoginViewModel) {
     val context = LocalContext.current
     val loginResult by viewModel.loginResult.collectAsState()
 
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var userType by remember { mutableStateOf("student") }
+    var email by remember { mutableStateOf("kubaj43i@gmail.com") }
+    var password by remember { mutableStateOf("root") }
+    var userType by remember { mutableStateOf("tutor") }
 
     Column(
         modifier = Modifier
@@ -80,10 +80,14 @@ fun LoginScreen(viewModel: LoginViewModel) {
         }
 
         loginResult?.let { result ->
-            result.onSuccess { student ->
+            result.onSuccess { user ->
                 Text("Login successful", color = Color.Green)
                 LaunchedEffect(Unit) {
-                    LoginService.student = student as Student // for now only Student
+                    if (userType == "student"){
+                        UserService.student = user as Student
+                    } else {
+                        UserService.tutor = user as Tutor
+                    }
                     val intent = Intent(context, MainActivity::class.java)
                     context.startActivity(intent)
                 }
