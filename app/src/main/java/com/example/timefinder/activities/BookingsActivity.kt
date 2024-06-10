@@ -21,16 +21,19 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.ui.res.painterResource
 import com.example.timefinder.MainScaffold
 import com.example.timefinder.Reservation
 import com.example.timefinder.UserService
-import java.time.LocalDateTime
 import java.time.ZoneId
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import com.example.timefinder.R
 
 class BookingsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -120,7 +123,10 @@ fun ReservationItem(
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
-                ){Icon(imageVector = Icons.Default.Info, contentDescription = "Home")
+                ){Icon(
+                    painter = painterResource(R.drawable.clock),
+                    contentDescription = "time"
+                )
                 Text(text = "$fromHour - $untilHour", style = MaterialTheme.typography.bodyMedium)
             }
             Row(
