@@ -14,7 +14,7 @@ class HomeActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TimeFinderTheme {
-                MainScaffold(title = "Główna") {
+                MainScaffold {
                     HomeScreen()
                 }
             }
@@ -31,7 +31,7 @@ fun HomeScreen() {
 @Composable
 fun HomeScreenPreview() {
     TimeFinderTheme {
-        MainScaffold(title = "Główna") {
+        MainScaffold {
             HomeScreen()
         }
     }

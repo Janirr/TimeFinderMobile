@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScaffold(title = "Strona główna") {
+                    MainScaffold {
                         DataScreen()
                     }
                 }
@@ -298,7 +298,7 @@ fun CalendarView(
         ) {
             DayOfWeek.entries.forEach { dayOfWeek ->
                 Text(
-                    text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
+                    text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.forLanguageTag("pl")),
                     textAlign = TextAlign.Center,
                     modifier = Modifier.weight(1f)
                 )
@@ -347,7 +347,7 @@ fun CalendarView(
 @Composable
 fun DataScreenPreview() {
     TimeFinderTheme {
-        MainScaffold(title = "Strona główna") {
+        MainScaffold {
             DataScreen()
         }
     }

@@ -21,7 +21,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import com.example.timefinder.MainScaffold
 import com.example.timefinder.Reservation
 import com.example.timefinder.UserService
@@ -36,7 +40,7 @@ class BookingsActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TimeFinderTheme {
-                MainScaffold(title = "Rezerwacje") {
+                MainScaffold {
                     BookingsScreen()
                 }
             }
@@ -98,24 +102,38 @@ fun ReservationItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
+        shape = MaterialTheme.shapes.medium,
         color = MaterialTheme.colorScheme.surface,
         tonalElevation = 2.dp
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row {
-                Text(text = "Dzień: $day ", style = MaterialTheme.typography.bodyMedium)
-                Text(text = "Czas: $fromHour - $untilHour", style = MaterialTheme.typography.bodyMedium)
-            }
-            Spacer(modifier = Modifier.height(8.dp))
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Icon(imageVector = Icons.Default.DateRange, contentDescription = "Home")
+                Text(text = "$day ", style = MaterialTheme.typography.bodyMedium)}
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ){Icon(imageVector = Icons.Default.Info, contentDescription = "Home")
+                Text(text = "$fromHour - $untilHour", style = MaterialTheme.typography.bodyMedium)
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Button(onClick = onSendSMS, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)) {
-                    Text(text = "Send SMS", color = MaterialTheme.colorScheme.onPrimary)
+                    Text(text = "Wyślij SMS", color = MaterialTheme.colorScheme.onPrimary)
                 }
                 Button(onClick = onModifyTime, colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)) {
-                    Text(text = "Modify Time", color = MaterialTheme.colorScheme.onSecondary)
+                    Text(text = "Edytuj", color = MaterialTheme.colorScheme.onSecondary)
                 }
             }
         }
@@ -127,7 +145,7 @@ fun ReservationItem(
 @Composable
 fun BookingsScreenPreview() {
     TimeFinderTheme {
-        MainScaffold(title = "Rezerwacje") {
+        MainScaffold {
             BookingsScreen()
         }
     }

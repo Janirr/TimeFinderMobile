@@ -1,6 +1,7 @@
 // MainScaffold.kt
 package com.example.timefinder
 
+import android.app.Activity
 import android.content.Intent
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -19,35 +20,16 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import com.example.timefinder.activities.BookingsActivity
 import com.example.timefinder.activities.HomeActivity
-import com.example.timefinder.activities.LoginActivity
 import com.example.timefinder.activities.MainActivity
 import com.example.timefinder.activities.ProfileActivity
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScaffold(title: String, content: @Composable () -> Unit) {
-//    val context = LocalContext.current
+fun MainScaffold(content: @Composable () -> Unit) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-//        topBar = {
-//            CenterAlignedTopAppBar(
-//                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-//                    MaterialTheme.colorScheme.primary,
-//                    titleContentColor = Color.White,
-//                ),
-//                title = {
-//                    Text(
-//                        title,
-//                        maxLines = 1,
-//                        overflow = TextOverflow.Ellipsis,
-//                        fontWeight = FontWeight.Bold
-//                    )
-//                },
-//                scrollBehavior = scrollBehavior,
-//            )
-//        },
         bottomBar = {
             BottomNavigationBar()
         }
@@ -74,7 +56,10 @@ fun BottomNavigationBar() {
             label = { Text("Główna") },
             selected = false,
             onClick = {
-                context.startActivity(Intent(context, HomeActivity::class.java))
+                context.startActivity(Intent(context, HomeActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+                })
+                (context as? Activity)?.overridePendingTransition(0, 0)
             },
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = Color.White,
@@ -89,7 +74,10 @@ fun BottomNavigationBar() {
             label = { Text("Zarezerwuj") },
             selected = false,
             onClick = {
-                context.startActivity(Intent(context, MainActivity::class.java))
+                context.startActivity(Intent(context, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+                })
+                (context as? Activity)?.overridePendingTransition(0, 0)
             },
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = Color.White,
@@ -103,7 +91,10 @@ fun BottomNavigationBar() {
             label = { Text("Rezerwacje") },
             selected = false,
             onClick = {
-                context.startActivity(Intent(context, BookingsActivity::class.java))
+                context.startActivity(Intent(context, BookingsActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+                })
+                (context as? Activity)?.overridePendingTransition(0, 0)
             },
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = Color.White,
@@ -117,7 +108,10 @@ fun BottomNavigationBar() {
             label = { Text("Profil") },
             selected = false,
             onClick = {
-                context.startActivity(Intent(context, ProfileActivity::class.java))
+                context.startActivity(Intent(context, ProfileActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
+                })
+                (context as? Activity)?.overridePendingTransition(0, 0)
             },
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = Color.White,
@@ -128,3 +122,4 @@ fun BottomNavigationBar() {
         )
     }
 }
+

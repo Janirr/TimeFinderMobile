@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.example.timefinder.*
+import com.example.timefinder.ui.theme.TimeFinderTheme
 
 class LoginActivity : ComponentActivity() {
 
@@ -26,7 +27,9 @@ class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            LoginScreen(viewModel)
+            TimeFinderTheme {
+                LoginScreen(viewModel)
+            }
         }
     }
 }
@@ -51,7 +54,7 @@ fun LoginScreen(viewModel: LoginViewModel) {
         TextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text("Email") }
+            label = { Text("Email") },
         )
         Spacer(modifier = Modifier.height(8.dp))
         TextField(

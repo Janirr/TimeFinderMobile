@@ -7,7 +7,6 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
-import retrofit2.http.Query
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.Date
@@ -28,9 +27,6 @@ interface ApiService {
 
     @POST("/login/tutor")
     suspend fun loginTutor(@Body request: LoginRequest): Response<Tutor>
-
-    @GET("/reservations")
-    suspend fun getReservations(@Query("email") email: String): List<Reservation>
 }
 
 data class Student(

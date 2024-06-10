@@ -23,7 +23,7 @@ class ProfileActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TimeFinderTheme {
-                MainScaffold(title = "Profil") {
+                MainScaffold {
                     ProfileScreen()
                 }
             }
@@ -59,7 +59,7 @@ fun ProfileScreen() {
 @Composable
 fun ProfileScreenPreview() {
     TimeFinderTheme {
-        MainScaffold(title = "Profil") {
+        MainScaffold {
             ProfileScreen()
         }
     }
