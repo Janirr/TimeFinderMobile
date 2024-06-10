@@ -2,7 +2,6 @@ package com.example.timefinder.activities
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
@@ -19,7 +18,6 @@ import com.example.timefinder.ui.theme.TimeFinderTheme
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
@@ -35,7 +33,6 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 class BookingsActivity : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -47,12 +44,12 @@ class BookingsActivity : ComponentActivity() {
         }
     }
 }
-
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun BookingsScreen() {
     val reservationList = UserService.tutor?.reservationList ?: UserService.student?.reservationList
     val context = LocalContext.current
+    val timeFormatter = DateTimeFormatter.ofPattern("HH:mm", Locale.forLanguageTag("pl"))
+    val dayFormatter = DateTimeFormatter.ofPattern("d MMMM", Locale.forLanguageTag("pl"))
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -67,9 +64,13 @@ fun BookingsScreen() {
             LazyColumn {
                 items(reservationList) { reservation ->
                     ReservationItem(reservation = reservation, onSendSMS = {
+                        val startDateTime = LocalDateTime.ofInstant(reservation.start.toInstant(), ZoneId.systemDefault())
+                        val day = startDateTime.format(dayFormatter)
+                        val fromHour = startDateTime.format(timeFormatter)
                         val intent = Intent(Intent.ACTION_VIEW).apply {
-                            data = Uri.parse("sms:999888777")
-                            putExtra("sms_body", "Your reservation")
+                            val student = reservation.student
+                            data = Uri.parse("sms:${student.phoneNumber}")
+                            putExtra("sms_body", "Hej ${student.name}, piszę w sprawie korepetycji na $day o godzinie $fromHour")
                         }
                         context.startActivity(intent)
                     }, onModifyTime = {
@@ -80,8 +81,6 @@ fun BookingsScreen() {
         }
     }
 }
-
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ReservationItem(
     reservation: Reservation,
@@ -140,7 +139,6 @@ fun ReservationItem(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun BookingsScreenPreview() {

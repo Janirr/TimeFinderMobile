@@ -1,4 +1,3 @@
-// HomeActivity.kt
 package com.example.timefinder.activities
 
 import android.os.Bundle

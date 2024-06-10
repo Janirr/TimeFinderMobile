@@ -1,6 +1,5 @@
 package com.example.timefinder
 
-import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
@@ -44,24 +43,25 @@ data class LoginRequest(
 )
 
 data class AvailableTime(
-    @SerializedName("fromHour") val fromHour: LocalTime,
-    @SerializedName("untilHour") val untilHour: LocalTime
+    val fromHour: LocalTime,
+    val untilHour: LocalTime
 )
 
 data class Reservation(
-    @SerializedName("id") val id: String,
-    @SerializedName("start") val start: Date,
-    @SerializedName("end") val end: Date,
-    @SerializedName("summary") val summary: String
+    val id: String,
+    val start: Date,
+    val end: Date,
+    val summary: String,
+    val student: Student
 )
 
 data class Tutor(
-    @SerializedName("id") val id: Int,
-    @SerializedName("name") val name: String,
-    @SerializedName("surname") val surname: String,
-    @SerializedName("phoneNumber") val phoneNumber: String,
-    @SerializedName("email") val email: String,
-    @SerializedName("calendarId") val calendarId: String,
-    @SerializedName("subject") val subject: String,
-    @SerializedName("reservationList") val reservationList: List<Reservation>
+    val id: Int,
+    val name: String,
+    val surname: String,
+    val phoneNumber: String,
+    val email: String,
+    val calendarId: String,
+    val subject: String,
+    val reservationList: List<Reservation>
 )

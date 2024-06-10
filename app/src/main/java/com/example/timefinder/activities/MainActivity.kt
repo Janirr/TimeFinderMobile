@@ -1,10 +1,8 @@
 package com.example.timefinder.activities
 
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -32,7 +30,6 @@ import java.time.format.TextStyle
 import java.util.Locale
 
 class MainActivity : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -50,7 +47,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DataScreen() {
     val coroutineScope = rememberCoroutineScope()
@@ -219,16 +215,6 @@ fun DataScreen() {
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
-
-//                if (availableTimes.isNotEmpty()) {
-//                    Text(
-//                        text = "Dostępne terminy",
-//                        color = Color.Black,
-//                        fontSize = 18.sp,
-//                        textAlign = TextAlign.Center,
-//                        modifier = Modifier.fillMaxWidth()
-//                    )
-//                }
             }
         }
 
@@ -278,7 +264,6 @@ fun DataScreen() {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarView(
     availableDates: List<LocalDate>,
@@ -342,7 +327,6 @@ fun CalendarView(
 }
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun DataScreenPreview() {
