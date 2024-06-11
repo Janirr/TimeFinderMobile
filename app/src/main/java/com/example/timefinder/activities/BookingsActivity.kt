@@ -30,6 +30,7 @@ import com.example.timefinder.UserService
 import java.time.ZoneId
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.filled.Person
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -73,7 +74,7 @@ fun BookingsScreen() {
                         val intent = Intent(Intent.ACTION_VIEW).apply {
                             val student = reservation.student
                             data = Uri.parse("sms:${student.phoneNumber}")
-                            putExtra("sms_body", "Hej ${student.name}, piszę w sprawie korepetycji na $day o godzinie $fromHour")
+                            putExtra("sms_body", "Cześć ${student.name}, czy zajęcia $day o $fromHour są aktualne?")
                         }
                         context.startActivity(intent)
                     }, onModifyTime = {
@@ -120,15 +121,19 @@ fun ReservationItem(
             ) {
                 Icon(imageVector = Icons.Default.DateRange, contentDescription = "Home")
                 Text(text = "$day ", style = MaterialTheme.typography.bodyMedium)}
-                Row(
+            Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
-                ){Icon(
-                    painter = painterResource(R.drawable.clock),
-                    contentDescription = "time"
-                )
+            ) {
+                Icon(painter = painterResource(R.drawable.clock), contentDescription = "time")
                 Text(text = "$fromHour - $untilHour", style = MaterialTheme.typography.bodyMedium)
             }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Icon(imageVector = Icons.Default.Person, contentDescription = "Student")
+                Text(text = "${reservation.student.name} ${reservation.student.surname}", style = MaterialTheme.typography.bodyMedium)}
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
@@ -141,6 +146,8 @@ fun ReservationItem(
                     Text(text = "Edytuj", color = MaterialTheme.colorScheme.onSecondary)
                 }
             }
+
+
         }
     }
 }
