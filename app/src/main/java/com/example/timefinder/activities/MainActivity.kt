@@ -107,7 +107,7 @@ fun DataScreen() {
             } else {
                 Card(
                     shape = MaterialTheme.shapes.medium,
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFFF0F0F0)),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFFF0F0F0)), // Explicit light gray color
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
@@ -115,7 +115,7 @@ fun DataScreen() {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
                             text = "Wybierz korepetytora",
-                            color = Color.Black,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontSize = 18.sp,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()
@@ -162,7 +162,7 @@ fun DataScreen() {
 
                 Card(
                     shape = MaterialTheme.shapes.medium,
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFFF0F0F0)),
+                    colors = CardDefaults.cardColors(containerColor = Color(0xFFF0F0F0)), // Explicit light gray color
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
@@ -170,7 +170,7 @@ fun DataScreen() {
                     Column(modifier = Modifier.padding(16.dp)) {
                         Text(
                             text = "Ile czasu potrzebujesz?",
-                            color = Color.Black,
+                            color = MaterialTheme.colorScheme.onSurface,
                             fontSize = 18.sp,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()
@@ -289,6 +289,7 @@ fun DataScreen() {
         }
     }
 }
+
 
 @Composable
 fun CalendarView(

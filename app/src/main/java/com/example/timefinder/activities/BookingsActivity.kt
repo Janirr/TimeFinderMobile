@@ -32,11 +32,14 @@ import androidx.compose.ui.unit.dp
 import com.example.timefinder.MainScaffold
 import com.example.timefinder.R
 import com.example.timefinder.Reservation
+import com.example.timefinder.Student
 import com.example.timefinder.UserService
 import com.example.timefinder.ui.theme.TimeFinderTheme
+import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Date
 import java.util.Locale
 
 class BookingsActivity : ComponentActivity() {
@@ -179,6 +182,48 @@ fun ReservationItem(
 @Preview(showBackground = true)
 @Composable
 fun BookingsScreenPreview() {
+    // Mock data
+    val exampleReservation2 = Reservation(
+        student = Student(
+            name = "Preview",
+            surname = "User2",
+            phoneNumber = "000000000",
+            email = "123",
+            id = 1,
+            reservationList = ArrayList()
+        ),
+        start = Date.from(Instant.parse("2024-06-10T08:00:00Z")),
+        end = Date.from(Instant.parse("2024-06-10T09:00:00Z")),
+        summary = "korki",
+        id = "!23"
+    )
+
+    val exampleStudent = Student(
+        name = "Preview",
+        surname = "User2",
+        phoneNumber = "000000000",
+        email = "123",
+        id = 1,
+        reservationList = listOf(exampleReservation2)
+    )
+
+    val exampleReservation = Reservation(
+        student = exampleStudent,
+        start = Date.from(Instant.parse("2024-06-10T08:00:00Z")),
+        end = Date.from(Instant.parse("2024-06-10T09:00:00Z")),
+        summary = "korki",
+        id = "!23"
+    )
+
+    UserService.student = Student(
+        name = "Preview",
+        surname = "User",
+        phoneNumber = "000000000",
+        email = "123",
+        id = 1,
+        reservationList = listOf(exampleReservation)
+    )
+
     TimeFinderTheme {
         MainScaffold {
             BookingsScreen()
