@@ -26,7 +26,18 @@ interface ApiService {
 
     @POST("/login/tutor")
     suspend fun loginTutor(@Body request: LoginRequest): Response<Tutor>
+
+    @GET("tutors/{tutorId}/pricing")
+    fun getPricing(
+        @Path("tutorId") tutorId: Int,
+    ): Call<List<Pricing>>
 }
+
+data class Pricing(
+    val id: Long,
+    val level: String,
+    val price: String
+)
 
 data class Student(
     val id: Int,

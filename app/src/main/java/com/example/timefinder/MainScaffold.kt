@@ -3,20 +3,30 @@ package com.example.timefinder
 
 import android.app.Activity
 import android.content.Intent
-import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.timefinder.activities.BookingsActivity
 import com.example.timefinder.activities.HomeActivity
@@ -52,8 +62,14 @@ fun BottomNavigationBar() {
         containerColor = MaterialTheme.colorScheme.primary
     ) {
         NavigationBarItem(
-            icon = { Icon(imageVector = Icons.Default.Home, contentDescription = "Home", modifier = Modifier.size(35.dp)) },
-            label = { Text("Główna") },
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.ShoppingCart,
+                    contentDescription = "Home",
+                    modifier = Modifier.size(35.dp)
+                )
+            },
+            label = { Text("Cennik") },
             selected = false,
             onClick = {
                 context.startActivity(Intent(context, HomeActivity::class.java).apply {
@@ -68,9 +84,14 @@ fun BottomNavigationBar() {
                 unselectedTextColor = Color.White
             )
         )
-
         NavigationBarItem(
-            icon = { Icon(imageVector = Icons.Default.DateRange, contentDescription = "Zarezerwuj", modifier = Modifier.size(35.dp)) },
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.DateRange,
+                    contentDescription = "Zarezerwuj",
+                    modifier = Modifier.size(35.dp)
+                )
+            },
             label = { Text("Zarezerwuj") },
             selected = false,
             onClick = {
@@ -86,6 +107,7 @@ fun BottomNavigationBar() {
                 unselectedTextColor = Color.White
             )
         )
+
         NavigationBarItem(
             icon = { Icon(imageVector = Icons.Default.List, contentDescription = "Rezerwacje", modifier = Modifier.size(35.dp)) },
             label = { Text("Rezerwacje") },
@@ -122,4 +144,3 @@ fun BottomNavigationBar() {
         )
     }
 }
-

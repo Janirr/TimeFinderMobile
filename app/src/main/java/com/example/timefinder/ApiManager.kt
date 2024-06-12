@@ -1,17 +1,13 @@
 package com.example.timefinder
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.time.LocalDate
-import java.util.HashMap
 
 class ApiManager {
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getTutors(
         onSuccess: (List<Tutor>) -> Unit,
         onFailure: (String?) -> Unit
@@ -36,7 +32,6 @@ class ApiManager {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getFreeTime(
         tutorId: Int,
         calendarId: String,

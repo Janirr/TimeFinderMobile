@@ -1,7 +1,5 @@
 package com.example.timefinder
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +11,6 @@ class LoginViewModel : ViewModel() {
     private val _loginResult = MutableStateFlow<Result<Any>?>(null)
     val loginResult: StateFlow<Result<Any>?> = _loginResult
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun login(email: String, password: String, userType: String) {
         viewModelScope.launch {
             try {
